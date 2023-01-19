@@ -1,0 +1,467 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<title>微软雅黑,11,1</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css"> 
+<!-- 
+.selected {font-weight: normal;background-color: #E2E2E2;padding:0px,2px,0px,2px;}
+.unselected { font-weight: normal;padding:0px,2px,0px,2px;}
+.hand { cursor: hand; }
+.p {height: 16px;width: 16px;vertical-align: middle;border: 0;}
+div,body { font-family: Tahoma, Verdana; font-size: 11px; }
+A:link {text-decoration: none; color:#000000}
+A:visited {text-decoration: none; color: #000000}
+A:active {text-decoration: none; color: #000000 }
+A:hover {text-decoration: none; color: #FF0000 }
+
+-->
+</style>
+
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+var cl,pn,pm,bl;
+var path = 'icons/';
+var pos = 0;
+var icon;
+var tar = 'content';
+var display;
+var imgi;
+var AutoCollapse;
+var LastSelected = -1;
+var loaded = false;
+var max;
+var divlist;
+
+function SetEnv(v,a){
+
+if(v==0){ 
+	pn = [['daplus.gif','daminus.gif'],['tplus.gif','tminus.gif'],['uaplus.gif','uaminus.gif'],['splus.gif','sminus.gif']];
+	PreloadImg('downangle.gif','tshaped.gif','upangle.gif','sline.gif','daplus.gif','daminus.gif','tplus.gif','tminus.gif','uaplus.gif','uaminus.gif','splus.gif','sminus.gif','blank.gif','line.gif');
+}else{
+	pn = [['plus.gif','minus.gif']];
+	PreloadImg('plus.gif','minus.gif','blank.gif');
+
+}
+AutoCollapse = a;
+}
+
+ function PreloadImg(){
+if (document.images) { 
+	var imgs = PreloadImg.arguments; 
+	var pload = new Array();
+	for (var i=0; i<imgs.length; i++) { 
+		pload[i] = new Image; 
+		pload[i].src = path + imgs[i]; 
+	} 
+} 
+ } 
+
+function get(o){
+var x;
+if(document.all) x=document.all[o]; 
+if(document.getElementById) x=document.getElementById(o);
+
+return x;
+}
+
+
+function pnImg(img){
+var i,j;
+for(i=0;i<=3;i++){
+	for(j=0;j<=1;j++){
+	if(img.substr(img.lastIndexOf('/') + 1)== pn[i][j]){
+		return i;
+	}
+	}
+}
+}
+function icon(img){
+var f;
+f = img.substr(img.lastIndexOf('/') + 1);
+if( f=='1.gif' || f=='2.gif'){
+	return ['1.gif','2.gif'];
+}
+if( f=='3.gif' || f=='4.gif'){
+	return ['3.gif','4.gif'];
+}
+if( f=='5.gif' || f=='6.gif'){
+	return ['5.gif','6.gif'];
+}
+if( f=='7.gif' || f=='8.gif'){
+	return ['7.gif','8.gif'];
+}
+return [f,f];
+}
+
+function show(id){
+get('d' + id).style.display='block';
+if(get('imgn' + id )) get('imgn' + id ).src= path + pn[pnImg(get('imgn' + id ).src)][1];
+get('img' + id ).src= path + icon(get('img' + id ).src)[1];
+
+}
+
+function collapse(id){
+get('d' + id ).style.display='none';
+if(get('imgn' + id )) get('imgn' + id ).src= path + pn[pnImg(get('imgn' + id ).src)][0];
+get('img' + id ).src= path + icon(get('img' + id ).src)[0];
+
+}
+
+function collapseAll(){
+var i;
+var o;
+for(i=0;i<=divlist.length-1;i++){
+	if(o=get('d' + divlist[i])){
+		if(o.style.display!='none'){ 
+			collapse(divlist[i]);
+		}
+	}
+}
+}
+
+function showAll(){
+var i;
+var o;
+for(i=0;i<=divlist.length-1;i++){
+	if(o=get('d' + divlist[i])){
+		if(o.style.display!='block'){ 
+			show(divlist[i]);
+		}
+	}
+}
+}
+
+function unselectAll(){
+var i=0;
+while(get("l" + i)){
+	get("l" + i).className = "unselected";
+	i++;
+}
+}
+
+function clickNode(index){
+var e;
+
+e = get("l" + index);
+if(e==null) return;
+e = e.parentNode;
+if(e.nodeName == 'A'){
+	if(e.href!= window.location.href + '#'){
+		parent.parent.content.location.href = e.href;
+	}else{
+		selectNode(index);
+	}
+	e.onclick;
+}
+}
+
+function showParent(ele){
+var e;
+e = ele.parentNode;
+
+if(e==null) return;
+
+if(e.nodeName == 'DIV'){
+	if(e.id!='') show(e.id.substring(1,e.id.length ));
+}else if(e.nodeName == 'A'){
+
+}
+showParent(e);
+}
+
+function showNode(index){
+showParent(get("l" + index));
+LinkClick(index);
+}
+
+function selectNode(index){
+if(LastSelected!=index){
+//collapseAll();
+showParent(get("l" + index));
+LinkClick(index);
+get('l' + index).scrollIntoView(true);
+
+
+//alert(get('l' + index).offsetHeight + '|' + document.body.clientHeight + '|' + document.body.offsetHeight);
+window.scrollTo(0,document.body.scrollTop); // - document.body.clientHeight /3);
+}
+}
+
+
+function NodeClick(id){
+if(get('d' + id ).style.display=='none'){
+	show(id);
+}else{
+	collapse(id);
+}
+return false;
+}
+
+function LinkDblClick(id){
+if(!AutoCollapse){
+	if(get('d' + id ).style.display=='none'){
+		show(id);
+	}else{
+		collapse(id);
+	}
+}
+return false;
+}
+
+function LinkClick(index,hasChild,r){
+if(AutoCollapse && hasChild){
+	if(get('d' + index ).style.display=='none'){
+		collapseAll()
+		showParent(get('l' + index));
+		show(index);
+	}else{
+		collapseAll()
+		showParent(get('l' + index));	
+		collapse(index);
+	}
+}
+if(LastSelected!=-1){
+	get('l' + LastSelected).className = "unselected";
+}
+get('l' + index).className = "selected";
+LastSelected = index;
+return r;
+}
+
+function body_onmousemove(event){
+if(typeof(document.body.scrollTop)!='undefined'){
+if(parseInt(event.clientX)<5){
+window.scroll(0,document.body.scrollTop);}}
+if(typeof(window.scrollY)!='undefined'){
+if(parseInt(event.clientX)<5){
+window.scrollTo(0,window.scrollY);}}
+}
+
+window.defaultStatus = '';
+
+function body_onload(){
+get('loading').style.display='none';
+loaded = true;
+if(parent.parent.content.document.readyState){
+	if(parent.parent.content.document.readyState == 'complete'){
+		try{parent.parent.content.syn();}catch(e){};
+	}
+}else{
+	if(parent.parent.contentLoaded){
+		try{parent.parent.content.syn();}catch(e){};
+	}
+}
+}
+
+//-->
+</SCRIPT>
+<script language="JavaScript" src="languages.js"></script>
+
+</head>
+
+<body bgcolor="#ffffff" leftmargin="5" topmargin="5" marginwidth="5" marginheight="5" onmousemove="body_onmousemove(event);" onload="body_onload();">
+<div id="loading"><font color="#FF0000" size="1"> Loading table of contents... 
+</font><br><br></div>
+<script>SetEnv(0,true)</script><div><nobr><img src="icons/downangle.gif" class="p"><a href="topics/首页.htm" onclick="return LinkClick('0',false,true)" target="content" title="首页" onmousemove="window.status='首页'"><img src="icons/11.gif" class="p"> <span id="l0" class="unselected">首页</span></a></nobr></div>
+<div><nobr><img src="icons/tshaped.gif" class="p"><a href="topics/法术派系-魔法的颜色-特殊法术成分.htm" onclick="return LinkClick('1',false,true)" target="content" title="法术派系-魔法的颜色-特殊法术成分" onmousemove="window.status='法术派系-魔法的颜色-特殊法术成分'"><img src="icons/11.gif" class="p"> <span id="l1" class="unselected">法术派系-魔法的颜色-特殊法术成分</span></a></nobr></div>
+<div><nobr><a href="#" onClick="return NodeClick('2')"><img id="imgn2" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('2',true,false)" onDblClick="return LinkDblClick('2')" target="content" title="职业法术列表" onmousemove="window.status='职业法术列表'"><img id="img2" src="icons/1.gif" class="p"> <span id="l2" class="unselected">职业法术列表</span></a></nobr></div>
+<div id="d2" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/BoED扩展--圣洁法术.htm" onclick="return LinkClick('3',false,true)" target="content" title="BoED扩展--圣洁法术" onmousemove="window.status='BoED扩展--圣洁法术'"><img src="icons/11.gif" class="p"> <span id="l3" class="unselected">BoED扩展--圣洁法术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/CA扩展--巫觋法术.htm" onclick="return LinkClick('4',false,true)" target="content" title="CA扩展--巫觋法术" onmousemove="window.status='CA扩展--巫觋法术'"><img src="icons/11.gif" class="p"> <span id="l4" class="unselected">CA扩展--巫觋法术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/CA扩展--战法师法术.htm" onclick="return LinkClick('5',false,true)" target="content" title="CA扩展--战法师法术" onmousemove="window.status='CA扩展--战法师法术'"><img src="icons/11.gif" class="p"> <span id="l5" class="unselected">CA扩展--战法师法术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/CW扩展--魔剑客法术.htm" onclick="return LinkClick('6',false,true)" target="content" title="CW扩展--魔剑客法术" onmousemove="window.status='CW扩展--魔剑客法术'"><img src="icons/11.gif" class="p"> <span id="l6" class="unselected">CW扩展--魔剑客法术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/PHB2扩展--暮刃法术.htm" onclick="return LinkClick('7',false,true)" target="content" title="PHB2扩展--暮刃法术" onmousemove="window.status='PHB2扩展--暮刃法术'"><img src="icons/11.gif" class="p"> <span id="l7" class="unselected">PHB2扩展--暮刃法术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/PHB2扩展--欺愚者法术.htm" onclick="return LinkClick('8',false,true)" target="content" title="PHB2扩展--欺愚者法术" onmousemove="window.status='PHB2扩展--欺愚者法术'"><img src="icons/11.gif" class="p"> <span id="l8" class="unselected">PHB2扩展--欺愚者法术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/刺客法术.htm" onclick="return LinkClick('9',false,true)" target="content" title="刺客法术" onmousemove="window.status='刺客法术'"><img src="icons/11.gif" class="p"> <span id="l9" class="unselected">刺客法术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/吟游诗人法术.htm" onclick="return LinkClick('10',false,true)" target="content" title="吟游诗人法术" onmousemove="window.status='吟游诗人法术'"><img src="icons/11.gif" class="p"> <span id="l10" class="unselected">吟游诗人法术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/圣武士神术.htm" onclick="return LinkClick('11',false,true)" target="content" title="圣武士神术" onmousemove="window.status='圣武士神术'"><img src="icons/11.gif" class="p"> <span id="l11" class="unselected">圣武士神术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/巡林客神术.htm" onclick="return LinkClick('12',false,true)" target="content" title="巡林客神术" onmousemove="window.status='巡林客神术'"><img src="icons/11.gif" class="p"> <span id="l12" class="unselected">巡林客神术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/德鲁伊神术.htm" onclick="return LinkClick('13',false,true)" target="content" title="德鲁伊神术" onmousemove="window.status='德鲁伊神术'"><img src="icons/11.gif" class="p"> <span id="l13" class="unselected">德鲁伊神术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/暗黑卫士法术.htm" onclick="return LinkClick('14',false,true)" target="content" title="暗黑卫士法术" onmousemove="window.status='暗黑卫士法术'"><img src="icons/11.gif" class="p"> <span id="l14" class="unselected">暗黑卫士法术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/职业法术列表/法师术士法术.htm" onclick="return LinkClick('15',false,true)" target="content" title="法师术士法术" onmousemove="window.status='法师术士法术'"><img src="icons/11.gif" class="p"> <span id="l15" class="unselected">法师术士法术</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/职业法术列表/牧师神术.htm" onclick="return LinkClick('16',false,true)" target="content" title="牧师神术" onmousemove="window.status='牧师神术'"><img src="icons/11.gif" class="p"> <span id="l16" class="unselected">牧师神术</span></a></nobr></div>
+</div><div><nobr><a href="#" onClick="return NodeClick('17')"><img id="imgn17" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('17',true,false)" onDblClick="return LinkDblClick('17')" target="content" title="领域法术" onmousemove="window.status='领域法术'"><img id="img17" src="icons/1.gif" class="p"> <span id="l17" class="unselected">领域法术</span></a></nobr></div>
+<div id="d17" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/SPC-万法大全领域.htm" onclick="return LinkClick('18',false,true)" target="content" title="SPC-万法大全领域" onmousemove="window.status='SPC-万法大全领域'"><img src="icons/11.gif" class="p"> <span id="l18" class="unselected">SPC-万法大全领域</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/BoED--信使领域（Herald Domain）.htm" onclick="return LinkClick('19',false,true)" target="content" title="BoED--信使领域（Herald Domain）" onmousemove="window.status='BoED--信使领域（Herald Domain）'"><img src="icons/11.gif" class="p"> <span id="l19" class="unselected">BoED--信使领域（Herald Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/BoED--喜乐领域(Joy Domain).htm" onclick="return LinkClick('20',false,true)" target="content" title="BoED--喜乐领域(Joy Domain)" onmousemove="window.status='BoED--喜乐领域(Joy Domain)'"><img src="icons/11.gif" class="p"> <span id="l20" class="unselected">BoED--喜乐领域(Joy Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/BoED--团体领域(Community Domain).htm" onclick="return LinkClick('21',false,true)" target="content" title="BoED--团体领域(Community Domain)" onmousemove="window.status='BoED--团体领域(Community Domain)'"><img src="icons/11.gif" class="p"> <span id="l21" class="unselected">BoED--团体领域(Community Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/BoED--天界领域（Celestial Domain）.htm" onclick="return LinkClick('22',false,true)" target="content" title="BoED--天界领域（Celestial Domain）" onmousemove="window.status='BoED--天界领域（Celestial Domain）'"><img src="icons/11.gif" class="p"> <span id="l22" class="unselected">BoED--天界领域（Celestial Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/BoED--忍耐领域（Endurance Domain）.htm" onclick="return LinkClick('23',false,true)" target="content" title="BoED--忍耐领域（Endurance Domain）" onmousemove="window.status='BoED--忍耐领域（Endurance Domain）'"><img src="icons/11.gif" class="p"> <span id="l23" class="unselected">BoED--忍耐领域（Endurance Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/BoED--欢愉领域（Pleasure Domain）.htm" onclick="return LinkClick('24',false,true)" target="content" title="BoED--欢愉领域（Pleasure Domain）" onmousemove="window.status='BoED--欢愉领域（Pleasure Domain）'"><img src="icons/11.gif" class="p"> <span id="l24" class="unselected">BoED--欢愉领域（Pleasure Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/BoED--神谴领域（Wrath Domain）.htm" onclick="return LinkClick('25',false,true)" target="content" title="BoED--神谴领域（Wrath Domain）" onmousemove="window.status='BoED--神谴领域（Wrath Domain）'"><img src="icons/11.gif" class="p"> <span id="l25" class="unselected">BoED--神谴领域（Wrath Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/BoED--精类领域（Fey Domain）.htm" onclick="return LinkClick('26',false,true)" target="content" title="BoED--精类领域（Fey Domain）" onmousemove="window.status='BoED--精类领域（Fey Domain）'"><img src="icons/11.gif" class="p"> <span id="l26" class="unselected">BoED--精类领域（Fey Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/BoED--荣耀领域（Glory Domain）.htm" onclick="return LinkClick('27',false,true)" target="content" title="BoED--荣耀领域（Glory Domain）" onmousemove="window.status='BoED--荣耀领域（Glory Domain）'"><img src="icons/11.gif" class="p"> <span id="l27" class="unselected">BoED--荣耀领域（Glory Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--净化领域(Purification  Domain).htm" onclick="return LinkClick('28',false,true)" target="content" title="CD--净化领域(Purification  Domain)" onmousemove="window.status='CD--净化领域(Purification  Domain)'"><img src="icons/11.gif" class="p"> <span id="l28" class="unselected">CD--净化领域(Purification  Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--创造领域(Creation Domain).htm" onclick="return LinkClick('29',false,true)" target="content" title="CD--创造领域(Creation Domain)" onmousemove="window.status='CD--创造领域(Creation Domain)'"><img src="icons/11.gif" class="p"> <span id="l29" class="unselected">CD--创造领域(Creation Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--召唤领域(Summoner  Domain).htm" onclick="return LinkClick('30',false,true)" target="content" title="CD--召唤领域(Summoner  Domain)" onmousemove="window.status='CD--召唤领域(Summoner  Domain)'"><img src="icons/11.gif" class="p"> <span id="l30" class="unselected">CD--召唤领域(Summoner  Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--天气领域(Weather Domain).htm" onclick="return LinkClick('31',false,true)" target="content" title="CD--天气领域(Weather Domain)" onmousemove="window.status='CD--天气领域(Weather Domain)'"><img src="icons/11.gif" class="p"> <span id="l31" class="unselected">CD--天气领域(Weather Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--契约领域(Pact Domain) .htm" onclick="return LinkClick('32',false,true)" target="content" title="CD--契约领域(Pact Domain)" onmousemove="window.status='CD--契约领域(Pact Domain)'"><img src="icons/11.gif" class="p"> <span id="l32" class="unselected">CD--契约领域(Pact Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--寒冷领域(Cold Domain).htm" onclick="return LinkClick('33',false,true)" target="content" title="CD--寒冷领域(Cold Domain)" onmousemove="window.status='CD--寒冷领域(Cold Domain)'"><img src="icons/11.gif" class="p"> <span id="l33" class="unselected">CD--寒冷领域(Cold Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--支配领域（Domination Domain）.htm" onclick="return LinkClick('34',false,true)" target="content" title="CD--支配领域（Domination Domain）" onmousemove="window.status='CD--支配领域（Domination Domain）'"><img src="icons/11.gif" class="p"> <span id="l34" class="unselected">CD--支配领域（Domination Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--梦境领域(Dream Domain).htm" onclick="return LinkClick('35',false,true)" target="content" title="CD--梦境领域(Dream Domain)" onmousemove="window.status='CD--梦境领域(Dream Domain)'"><img src="icons/11.gif" class="p"> <span id="l35" class="unselected">CD--梦境领域(Dream Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--瘟疫领域(Pestilence Domain).htm" onclick="return LinkClick('36',false,true)" target="content" title="CD--瘟疫领域(Pestilence Domain)" onmousemove="window.status='CD--瘟疫领域(Pestilence Domain)'"><img src="icons/11.gif" class="p"> <span id="l36" class="unselected">CD--瘟疫领域(Pestilence Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--神秘领域（Mysticism Domain）.htm" onclick="return LinkClick('37',false,true)" target="content" title="CD--神秘领域（Mysticism Domain）" onmousemove="window.status='CD--神秘领域（Mysticism Domain）'"><img src="icons/11.gif" class="p"> <span id="l37" class="unselected">CD--神秘领域（Mysticism Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--神谕领域(Oracle Domain) .htm" onclick="return LinkClick('38',false,true)" target="content" title="CD--神谕领域(Oracle Domain)" onmousemove="window.status='CD--神谕领域(Oracle Domain)'"><img src="icons/11.gif" class="p"> <span id="l38" class="unselected">CD--神谕领域(Oracle Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--竞争领域(Competition Domain).htm" onclick="return LinkClick('39',false,true)" target="content" title="CD--竞争领域(Competition Domain)" onmousemove="window.status='CD--竞争领域(Competition Domain)'"><img src="icons/11.gif" class="p"> <span id="l39" class="unselected">CD--竞争领域(Competition Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--裁决领域(Inquistion Domain).htm" onclick="return LinkClick('40',false,true)" target="content" title="CD--裁决领域(Inquistion Domain)" onmousemove="window.status='CD--裁决领域(Inquistion Domain)'"><img src="icons/11.gif" class="p"> <span id="l40" class="unselected">CD--裁决领域(Inquistion Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--解放领域(Liberation Domain).htm" onclick="return LinkClick('41',false,true)" target="content" title="CD--解放领域(Liberation Domain)" onmousemove="window.status='CD--解放领域(Liberation Domain)'"><img src="icons/11.gif" class="p"> <span id="l41" class="unselected">CD--解放领域(Liberation Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CD--迅捷领域(Celerity Domain).htm" onclick="return LinkClick('42',false,true)" target="content" title="CD--迅捷领域(Celerity Domain)" onmousemove="window.status='CD--迅捷领域(Celerity Domain)'"><img src="icons/11.gif" class="p"> <span id="l42" class="unselected">CD--迅捷领域(Celerity Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CW--专制领域(Tyranny Domain).htm" onclick="return LinkClick('43',false,true)" target="content" title="CW--专制领域(Tyranny Domain)" onmousemove="window.status='CW--专制领域(Tyranny Domain)'"><img src="icons/11.gif" class="p"> <span id="l43" class="unselected">CW--专制领域(Tyranny Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CW--勇气领域(Courage Domain).htm" onclick="return LinkClick('44',false,true)" target="content" title="CW--勇气领域(Courage Domain)" onmousemove="window.status='CW--勇气领域(Courage Domain)'"><img src="icons/11.gif" class="p"> <span id="l44" class="unselected">CW--勇气领域(Courage Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CW--命运领域(Fate Domain).htm" onclick="return LinkClick('45',false,true)" target="content" title="CW--命运领域(Fate Domain)" onmousemove="window.status='CW--命运领域(Fate Domain)'"><img src="icons/11.gif" class="p"> <span id="l45" class="unselected">CW--命运领域(Fate Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CW--计划领域(Planning Domain).htm" onclick="return LinkClick('46',false,true)" target="content" title="CW--计划领域(Planning Domain)" onmousemove="window.status='CW--计划领域(Planning Domain)'"><img src="icons/11.gif" class="p"> <span id="l46" class="unselected">CW--计划领域(Planning Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/CW--贵族领域(Nobility Domain).htm" onclick="return LinkClick('47',false,true)" target="content" title="CW--贵族领域(Nobility Domain)" onmousemove="window.status='CW--贵族领域(Nobility Domain)'"><img src="icons/11.gif" class="p"> <span id="l47" class="unselected">CW--贵族领域(Nobility Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Dra--控制进阶领域（Domination Prestige Domain）.htm" onclick="return LinkClick('48',false,true)" target="content" title="Dra--控制进阶领域（Domination Prestige Domain）" onmousemove="window.status='Dra--控制进阶领域（Domination Prestige Domain）'"><img src="icons/11.gif" class="p"> <span id="l48" class="unselected">Dra--控制进阶领域（Domination Prestige Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Dra--荣耀进阶领域（Glory Prestige Domain）.htm" onclick="return LinkClick('49',false,true)" target="content" title="Dra--荣耀进阶领域（Glory Prestige Domain）" onmousemove="window.status='Dra--荣耀进阶领域（Glory Prestige Domain）'"><img src="icons/11.gif" class="p"> <span id="l49" class="unselected">Dra--荣耀进阶领域（Glory Prestige Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Dra--财富领域（Wealth Domain）.htm" onclick="return LinkClick('50',false,true)" target="content" title="Dra--财富领域（Wealth Domain）" onmousemove="window.status='Dra--财富领域（Wealth Domain）'"><img src="icons/11.gif" class="p"> <span id="l50" class="unselected">Dra--财富领域（Wealth Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Dra--贪婪领域（Greed Domain）.htm" onclick="return LinkClick('51',false,true)" target="content" title="Dra--贪婪领域（Greed Domain）" onmousemove="window.status='Dra--贪婪领域（Greed Domain）'"><img src="icons/11.gif" class="p"> <span id="l51" class="unselected">Dra--贪婪领域（Greed Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Dra--龙领域（Dragon Domain）.htm" onclick="return LinkClick('52',false,true)" target="content" title="Dra--龙领域（Dragon Domain）" onmousemove="window.status='Dra--龙领域（Dragon Domain）'"><img src="icons/11.gif" class="p"> <span id="l52" class="unselected">Dra--龙领域（Dragon Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/FC1--恶魔领域（Demonic Domain）.htm" onclick="return LinkClick('53',false,true)" target="content" title="FC1--恶魔领域（Demonic Domain）" onmousemove="window.status='FC1--恶魔领域（Demonic Domain）'"><img src="icons/11.gif" class="p"> <span id="l53" class="unselected">FC1--恶魔领域（Demonic Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/FC1--熵领域（Entropy Domain）.htm" onclick="return LinkClick('54',false,true)" target="content" title="FC1--熵领域（Entropy Domain）" onmousemove="window.status='FC1--熵领域（Entropy Domain）'"><img src="icons/11.gif" class="p"> <span id="l54" class="unselected">FC1--熵领域（Entropy Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/FC1--狂怒领域（Fury Domain）.htm" onclick="return LinkClick('55',false,true)" target="content" title="FC1--狂怒领域（Fury Domain）" onmousemove="window.status='FC1--狂怒领域（Fury Domain）'"><img src="icons/11.gif" class="p"> <span id="l55" class="unselected">FC1--狂怒领域（Fury Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/FC1--腐化领域（Corruption Domain）.htm" onclick="return LinkClick('56',false,true)" target="content" title="FC1--腐化领域（Corruption Domain）" onmousemove="window.status='FC1--腐化领域（Corruption Domain）'"><img src="icons/11.gif" class="p"> <span id="l56" class="unselected">FC1--腐化领域（Corruption Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/FC1--诱惑领域（Temptation Domain）.htm" onclick="return LinkClick('57',false,true)" target="content" title="FC1--诱惑领域（Temptation Domain）" onmousemove="window.status='FC1--诱惑领域（Temptation Domain）'"><img src="icons/11.gif" class="p"> <span id="l57" class="unselected">FC1--诱惑领域（Temptation Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/FC1--软泥怪领域（Ooze Domain）.htm" onclick="return LinkClick('58',false,true)" target="content" title="FC1--软泥怪领域（Ooze Domain）" onmousemove="window.status='FC1--软泥怪领域（Ooze Domain）'"><img src="icons/11.gif" class="p"> <span id="l58" class="unselected">FC1--软泥怪领域（Ooze Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/FC2--魔鬼领域（Diabolic Domain）.htm" onclick="return LinkClick('59',false,true)" target="content" title="FC2--魔鬼领域（Diabolic Domain）" onmousemove="window.status='FC2--魔鬼领域（Diabolic Domain）'"><img src="icons/11.gif" class="p"> <span id="l59" class="unselected">FC2--魔鬼领域（Diabolic Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Frost--隆冬领域（Winter Domain).htm" onclick="return LinkClick('60',false,true)" target="content" title="Frost--隆冬领域（Winter Domain)" onmousemove="window.status='Frost--隆冬领域（Winter Domain)'"><img src="icons/11.gif" class="p"> <span id="l60" class="unselected">Frost--隆冬领域（Winter Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/LM--不死领域（Undeath Domain）.htm" onclick="return LinkClick('61',false,true)" target="content" title="LM--不死领域（Undeath Domain）" onmousemove="window.status='LM--不死领域（Undeath Domain）'"><img src="icons/11.gif" class="p"> <span id="l61" class="unselected">LM--不死领域（Undeath Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/LM--控死领域（Deathbound Domain）.htm" onclick="return LinkClick('62',false,true)" target="content" title="LM--控死领域（Deathbound Domain）" onmousemove="window.status='LM--控死领域（Deathbound Domain）'"><img src="icons/11.gif" class="p"> <span id="l62" class="unselected">LM--控死领域（Deathbound Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/LM--饥饿领域（Hunger Domain）.htm" onclick="return LinkClick('63',false,true)" target="content" title="LM--饥饿领域（Hunger Domain）" onmousemove="window.status='LM--饥饿领域（Hunger Domain）'"><img src="icons/11.gif" class="p"> <span id="l63" class="unselected">LM--饥饿领域（Hunger Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/LoM--力场领域（Foecr Domain）.htm" onclick="return LinkClick('64',false,true)" target="content" title="LoM--力场领域（Foecr Domain）" onmousemove="window.status='LoM--力场领域（Foecr Domain）'"><img src="icons/11.gif" class="p"> <span id="l64" class="unselected">LoM--力场领域（Foecr Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/LoM--心灵领域（Mind Domain）.htm" onclick="return LinkClick('65',false,true)" target="content" title="LoM--心灵领域（Mind Domain）" onmousemove="window.status='LoM--心灵领域（Mind Domain）'"><img src="icons/11.gif" class="p"> <span id="l65" class="unselected">LoM--心灵领域（Mind Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/LoM--憎恨领域（Hatred Domain）.htm" onclick="return LinkClick('66',false,true)" target="content" title="LoM--憎恨领域（Hatred Domain）" onmousemove="window.status='LoM--憎恨领域（Hatred Domain）'"><img src="icons/11.gif" class="p"> <span id="l66" class="unselected">LoM--憎恨领域（Hatred Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/LoM--疯狂领域（Madness Domain）.htm" onclick="return LinkClick('67',false,true)" target="content" title="LoM--疯狂领域（Madness Domain）" onmousemove="window.status='LoM--疯狂领域（Madness Domain）'"><img src="icons/11.gif" class="p"> <span id="l67" class="unselected">LoM--疯狂领域（Madness Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/LoM--秽黯领域（Vile Darkness Domain）.htm" onclick="return LinkClick('68',false,true)" target="content" title="LoM--秽黯领域（Vile Darkness Domain）" onmousemove="window.status='LoM--秽黯领域（Vile Darkness Domain）'"><img src="icons/11.gif" class="p"> <span id="l68" class="unselected">LoM--秽黯领域（Vile Darkness Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/LoM--腐化领域（Corruption Domain）.htm" onclick="return LinkClick('69',false,true)" target="content" title="LoM--腐化领域（Corruption Domain）" onmousemove="window.status='LoM--腐化领域（Corruption Domain）'"><img src="icons/11.gif" class="p"> <span id="l69" class="unselected">LoM--腐化领域（Corruption Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/RoD--城市领域(City Domain).htm" onclick="return LinkClick('70',false,true)" target="content" title="RoD--城市领域(City Domain)" onmousemove="window.status='RoD--城市领域(City Domain)'"><img src="icons/11.gif" class="p"> <span id="l70" class="unselected">RoD--城市领域(City Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/RoD--宿命领域(Destiny Domain).htm" onclick="return LinkClick('71',false,true)" target="content" title="RoD--宿命领域(Destiny Domain)" onmousemove="window.status='RoD--宿命领域(Destiny Domain)'"><img src="icons/11.gif" class="p"> <span id="l71" class="unselected">RoD--宿命领域(Destiny Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/RoW--天空领域（Sky Domain）.htm" onclick="return LinkClick('72',false,true)" target="content" title="RoW--天空领域（Sky Domain）" onmousemove="window.status='RoW--天空领域（Sky Domain）'"><img src="icons/11.gif" class="p"> <span id="l72" class="unselected">RoW--天空领域（Sky Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Sand--安息领域（Repose Domain）.htm" onclick="return LinkClick('73',false,true)" target="content" title="Sand--安息领域（Repose Domain）" onmousemove="window.status='Sand--安息领域（Repose Domain）'"><img src="icons/11.gif" class="p"> <span id="l73" class="unselected">Sand--安息领域（Repose Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Sand--干渴领域（Thirst Domain）.htm" onclick="return LinkClick('74',false,true)" target="content" title="Sand--干渴领域（Thirst Domain）" onmousemove="window.status='Sand--干渴领域（Thirst Domain）'"><img src="icons/11.gif" class="p"> <span id="l74" class="unselected">Sand--干渴领域（Thirst Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Sand--盛夏领域（Summer Domain）.htm" onclick="return LinkClick('75',false,true)" target="content" title="Sand--盛夏领域（Summer Domain）" onmousemove="window.status='Sand--盛夏领域（Summer Domain）'"><img src="icons/11.gif" class="p"> <span id="l75" class="unselected">Sand--盛夏领域（Summer Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Sand--砂领域（Sand Domain）.htm" onclick="return LinkClick('76',false,true)" target="content" title="Sand--砂领域（Sand Domain）" onmousemove="window.status='Sand--砂领域（Sand Domain）'"><img src="icons/11.gif" class="p"> <span id="l76" class="unselected">Sand--砂领域（Sand Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Sand--符文领域（Rune Domain）.htm" onclick="return LinkClick('77',false,true)" target="content" title="Sand--符文领域（Rune Domain）" onmousemove="window.status='Sand--符文领域（Rune Domain）'"><img src="icons/11.gif" class="p"> <span id="l77" class="unselected">Sand--符文领域（Rune Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Storm--水族领域（Seafolk Domain）.htm" onclick="return LinkClick('78',false,true)" target="content" title="Storm--水族领域（Seafolk Domain）" onmousemove="window.status='Storm--水族领域（Seafolk Domain）'"><img src="icons/11.gif" class="p"> <span id="l78" class="unselected">Storm--水族领域（Seafolk Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Storm--海洋领域（Ocean Domain).htm" onclick="return LinkClick('79',false,true)" target="content" title="Storm--海洋领域（Ocean Domain)" onmousemove="window.status='Storm--海洋领域（Ocean Domain)'"><img src="icons/11.gif" class="p"> <span id="l79" class="unselected">Storm--海洋领域（Ocean Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Storm--风暴领域(Storm Domain).htm" onclick="return LinkClick('80',false,true)" target="content" title="Storm--风暴领域(Storm Domain)" onmousemove="window.status='Storm--风暴领域(Storm Domain)'"><img src="icons/11.gif" class="p"> <span id="l80" class="unselected">Storm--风暴领域(Storm Domain)</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/Storm--黑水领域（Blackwater Domain）.htm" onclick="return LinkClick('81',false,true)" target="content" title="Storm--黑水领域（Blackwater Domain）" onmousemove="window.status='Storm--黑水领域（Blackwater Domain）'"><img src="icons/11.gif" class="p"> <span id="l81" class="unselected">Storm--黑水领域（Blackwater Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/保护领域（Protection Domain）.htm" onclick="return LinkClick('82',false,true)" target="content" title="保护领域（Protection Domain）" onmousemove="window.status='保护领域（Protection Domain）'"><img src="icons/11.gif" class="p"> <span id="l82" class="unselected">保护领域（Protection Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/力量领域（Strength Domain）.htm" onclick="return LinkClick('83',false,true)" target="content" title="力量领域（Strength Domain）" onmousemove="window.status='力量领域（Strength Domain）'"><img src="icons/11.gif" class="p"> <span id="l83" class="unselected">力量领域（Strength Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/动物领域（Animal Domain）.htm" onclick="return LinkClick('84',false,true)" target="content" title="动物领域（Animal Domain）" onmousemove="window.status='动物领域（Animal Domain）'"><img src="icons/11.gif" class="p"> <span id="l84" class="unselected">动物领域（Animal Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/医疗领域（Healing Domain）.htm" onclick="return LinkClick('85',false,true)" target="content" title="医疗领域（Healing Domain）" onmousemove="window.status='医疗领域（Healing Domain）'"><img src="icons/11.gif" class="p"> <span id="l85" class="unselected">医疗领域（Healing Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/善良领域（Good Domain）.htm" onclick="return LinkClick('86',false,true)" target="content" title="善良领域（Good Domain）" onmousemove="window.status='善良领域（Good Domain）'"><img src="icons/11.gif" class="p"> <span id="l86" class="unselected">善良领域（Good Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/土领域（Earth Domain）.htm" onclick="return LinkClick('87',false,true)" target="content" title="土领域（Earth Domain）" onmousemove="window.status='土领域（Earth Domain）'"><img src="icons/11.gif" class="p"> <span id="l87" class="unselected">土领域（Earth Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/太阳领域（Sun Domain）.htm" onclick="return LinkClick('88',false,true)" target="content" title="太阳领域（Sun Domain）" onmousemove="window.status='太阳领域（Sun Domain）'"><img src="icons/11.gif" class="p"> <span id="l88" class="unselected">太阳领域（Sun Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/战争领域（War Domain）.htm" onclick="return LinkClick('89',false,true)" target="content" title="战争领域（War Domain）" onmousemove="window.status='战争领域（War Domain）'"><img src="icons/11.gif" class="p"> <span id="l89" class="unselected">战争领域（War Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/旅行领域（Travel Domain）.htm" onclick="return LinkClick('90',false,true)" target="content" title="旅行领域（Travel Domain）" onmousemove="window.status='旅行领域（Travel Domain）'"><img src="icons/11.gif" class="p"> <span id="l90" class="unselected">旅行领域（Travel Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/机运领域（Luck Domain）.htm" onclick="return LinkClick('91',false,true)" target="content" title="机运领域（Luck Domain）" onmousemove="window.status='机运领域（Luck Domain）'"><img src="icons/11.gif" class="p"> <span id="l91" class="unselected">机运领域（Luck Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/植物领域（Plant Domain）.htm" onclick="return LinkClick('92',false,true)" target="content" title="植物领域（Plant Domain）" onmousemove="window.status='植物领域（Plant Domain）'"><img src="icons/11.gif" class="p"> <span id="l92" class="unselected">植物领域（Plant Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/死亡领域（Death Domain）.htm" onclick="return LinkClick('93',false,true)" target="content" title="死亡领域（Death Domain）" onmousemove="window.status='死亡领域（Death Domain）'"><img src="icons/11.gif" class="p"> <span id="l93" class="unselected">死亡领域（Death Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/气领域（Air Domain）.htm" onclick="return LinkClick('94',false,true)" target="content" title="气领域（Air Domain）" onmousemove="window.status='气领域（Air Domain）'"><img src="icons/11.gif" class="p"> <span id="l94" class="unselected">气领域（Air Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/水领域（Water Domain）.htm" onclick="return LinkClick('95',false,true)" target="content" title="水领域（Water Domain）" onmousemove="window.status='水领域（Water Domain）'"><img src="icons/11.gif" class="p"> <span id="l95" class="unselected">水领域（Water Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/混乱领域（Chaos Domain）.htm" onclick="return LinkClick('96',false,true)" target="content" title="混乱领域（Chaos Domain）" onmousemove="window.status='混乱领域（Chaos Domain）'"><img src="icons/11.gif" class="p"> <span id="l96" class="unselected">混乱领域（Chaos Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/火领域（Fire Domain）.htm" onclick="return LinkClick('97',false,true)" target="content" title="火领域（Fire Domain）" onmousemove="window.status='火领域（Fire Domain）'"><img src="icons/11.gif" class="p"> <span id="l97" class="unselected">火领域（Fire Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/知识领域（Knowledge Domain）.htm" onclick="return LinkClick('98',false,true)" target="content" title="知识领域（Knowledge Domain）" onmousemove="window.status='知识领域（Knowledge Domain）'"><img src="icons/11.gif" class="p"> <span id="l98" class="unselected">知识领域（Knowledge Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/破坏领域（Destruction Domain）.htm" onclick="return LinkClick('99',false,true)" target="content" title="破坏领域（Destruction Domain）" onmousemove="window.status='破坏领域（Destruction Domain）'"><img src="icons/11.gif" class="p"> <span id="l99" class="unselected">破坏领域（Destruction Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/秩序领域（Law Domain）.htm" onclick="return LinkClick('100',false,true)" target="content" title="秩序领域（Law Domain）" onmousemove="window.status='秩序领域（Law Domain）'"><img src="icons/11.gif" class="p"> <span id="l100" class="unselected">秩序领域（Law Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/诡术领域（Trickery Domain）.htm" onclick="return LinkClick('101',false,true)" target="content" title="诡术领域（Trickery Domain）" onmousemove="window.status='诡术领域（Trickery Domain）'"><img src="icons/11.gif" class="p"> <span id="l101" class="unselected">诡术领域（Trickery Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/领域法术/邪恶领域（EVIL DOMAIN）.htm" onclick="return LinkClick('102',false,true)" target="content" title="邪恶领域（Evil Domain）" onmousemove="window.status='邪恶领域（Evil Domain）'"><img src="icons/11.gif" class="p"> <span id="l102" class="unselected">邪恶领域（Evil Domain）</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/领域法术/魔法领域（Magic Domain）.htm" onclick="return LinkClick('103',false,true)" target="content" title="魔法领域（Magic Domain）" onmousemove="window.status='魔法领域（Magic Domain）'"><img src="icons/11.gif" class="p"> <span id="l103" class="unselected">魔法领域（Magic Domain）</span></a></nobr></div>
+</div><div><nobr><a href="#" onClick="return NodeClick('104')"><img id="imgn104" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('104',true,false)" onDblClick="return LinkDblClick('104')" target="content" title="法术字母索引" onmousemove="window.status='法术字母索引'"><img id="img104" src="icons/1.gif" class="p"> <span id="l104" class="unselected">法术字母索引</span></a></nobr></div>
+<div id="d104" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/A.htm" onclick="return LinkClick('105',false,true)" target="content" title="A" onmousemove="window.status='A'"><img src="icons/11.gif" class="p"> <span id="l105" class="unselected">A</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/B.htm" onclick="return LinkClick('106',false,true)" target="content" title="B" onmousemove="window.status='B'"><img src="icons/11.gif" class="p"> <span id="l106" class="unselected">B</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/C.htm" onclick="return LinkClick('107',false,true)" target="content" title="C" onmousemove="window.status='C'"><img src="icons/11.gif" class="p"> <span id="l107" class="unselected">C</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/D.htm" onclick="return LinkClick('108',false,true)" target="content" title="D" onmousemove="window.status='D'"><img src="icons/11.gif" class="p"> <span id="l108" class="unselected">D</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/E.htm" onclick="return LinkClick('109',false,true)" target="content" title="E" onmousemove="window.status='E'"><img src="icons/11.gif" class="p"> <span id="l109" class="unselected">E</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/F.htm" onclick="return LinkClick('110',false,true)" target="content" title="F" onmousemove="window.status='F'"><img src="icons/11.gif" class="p"> <span id="l110" class="unselected">F</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/G.htm" onclick="return LinkClick('111',false,true)" target="content" title="G" onmousemove="window.status='G'"><img src="icons/11.gif" class="p"> <span id="l111" class="unselected">G</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/H.htm" onclick="return LinkClick('112',false,true)" target="content" title="H" onmousemove="window.status='H'"><img src="icons/11.gif" class="p"> <span id="l112" class="unselected">H</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/I.htm" onclick="return LinkClick('113',false,true)" target="content" title="I" onmousemove="window.status='I'"><img src="icons/11.gif" class="p"> <span id="l113" class="unselected">I</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/J.htm" onclick="return LinkClick('114',false,true)" target="content" title="J" onmousemove="window.status='J'"><img src="icons/11.gif" class="p"> <span id="l114" class="unselected">J</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/K.htm" onclick="return LinkClick('115',false,true)" target="content" title="K" onmousemove="window.status='K'"><img src="icons/11.gif" class="p"> <span id="l115" class="unselected">K</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/L.htm" onclick="return LinkClick('116',false,true)" target="content" title="L" onmousemove="window.status='L'"><img src="icons/11.gif" class="p"> <span id="l116" class="unselected">L</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/M.htm" onclick="return LinkClick('117',false,true)" target="content" title="M" onmousemove="window.status='M'"><img src="icons/11.gif" class="p"> <span id="l117" class="unselected">M</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/N.htm" onclick="return LinkClick('118',false,true)" target="content" title="N" onmousemove="window.status='N'"><img src="icons/11.gif" class="p"> <span id="l118" class="unselected">N</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/O.htm" onclick="return LinkClick('119',false,true)" target="content" title="O" onmousemove="window.status='O'"><img src="icons/11.gif" class="p"> <span id="l119" class="unselected">O</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/P.htm" onclick="return LinkClick('120',false,true)" target="content" title="P" onmousemove="window.status='P'"><img src="icons/11.gif" class="p"> <span id="l120" class="unselected">P</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/Q.htm" onclick="return LinkClick('121',false,true)" target="content" title="Q" onmousemove="window.status='Q'"><img src="icons/11.gif" class="p"> <span id="l121" class="unselected">Q</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/R.htm" onclick="return LinkClick('122',false,true)" target="content" title="R" onmousemove="window.status='R'"><img src="icons/11.gif" class="p"> <span id="l122" class="unselected">R</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/S.htm" onclick="return LinkClick('123',false,true)" target="content" title="S" onmousemove="window.status='S'"><img src="icons/11.gif" class="p"> <span id="l123" class="unselected">S</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/T.htm" onclick="return LinkClick('124',false,true)" target="content" title="T" onmousemove="window.status='T'"><img src="icons/11.gif" class="p"> <span id="l124" class="unselected">T</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/U.htm" onclick="return LinkClick('125',false,true)" target="content" title="U" onmousemove="window.status='U'"><img src="icons/11.gif" class="p"> <span id="l125" class="unselected">U</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/V.htm" onclick="return LinkClick('126',false,true)" target="content" title="V" onmousemove="window.status='V'"><img src="icons/11.gif" class="p"> <span id="l126" class="unselected">V</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/W.htm" onclick="return LinkClick('127',false,true)" target="content" title="W" onmousemove="window.status='W'"><img src="icons/11.gif" class="p"> <span id="l127" class="unselected">W</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/X.htm" onclick="return LinkClick('128',false,true)" target="content" title="X" onmousemove="window.status='X'"><img src="icons/11.gif" class="p"> <span id="l128" class="unselected">X</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/Y.htm" onclick="return LinkClick('129',false,true)" target="content" title="Y" onmousemove="window.status='Y'"><img src="icons/11.gif" class="p"> <span id="l129" class="unselected">Y</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/Z.htm" onclick="return LinkClick('130',false,true)" target="content" title="Z" onmousemove="window.status='Z'"><img src="icons/11.gif" class="p"> <span id="l130" class="unselected">Z</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/法术字母索引/关于降咒-Bestowed Curese.htm" onclick="return LinkClick('131',false,true)" target="content" title="关于降咒-Bestowed Curese" onmousemove="window.status='关于降咒-Bestowed Curese'"><img src="icons/11.gif" class="p"> <span id="l131" class="unselected">关于降咒-Bestowed Curese</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/法术字母索引/召唤列表-summon.htm" onclick="return LinkClick('132',false,true)" target="content" title="召唤列表-summon" onmousemove="window.status='召唤列表-summon'"><img src="icons/11.gif" class="p"> <span id="l132" class="unselected">召唤列表-summon</span></a></nobr></div>
+</div><div><nobr><a href="#" onClick="return NodeClick('133')"><img id="imgn133" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('133',true,false)" onDblClick="return LinkDblClick('133')" target="content" title="各种其他类法术及超能" onmousemove="window.status='各种其他类法术及超能'"><img id="img133" src="icons/1.gif" class="p"> <span id="l133" class="unselected">各种其他类法术及超能</span></a></nobr></div>
+<div id="d133" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('134')"><img id="imgn134" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('134',true,false)" onDblClick="return LinkDblClick('134')" target="content" title="九剑《Tome of Battle》" onmousemove="window.status='九剑《Tome of Battle》'"><img id="img134" src="icons/1.gif" class="p"> <span id="l134" class="unselected">九剑《Tome of Battle》</span></a></nobr></div>
+<div id="d134" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/九剑《Tome of Battle》/武道家等级.htm" onclick="return LinkClick('135',false,true)" target="content" title="武道家等级" onmousemove="window.status='武道家等级'"><img src="icons/11.gif" class="p"> <span id="l135" class="unselected">武道家等级</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/九剑《Tome of Battle》/招数列表.htm" onclick="return LinkClick('136',false,true)" target="content" title="招数列表" onmousemove="window.status='招数列表'"><img src="icons/11.gif" class="p"> <span id="l136" class="unselected">招数列表</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/九剑《Tome of Battle》/九剑-影手.htm" onclick="return LinkClick('137',false,true)" target="content" title="九剑-影手" onmousemove="window.status='九剑-影手'"><img src="icons/11.gif" class="p"> <span id="l137" class="unselected">九剑-影手</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/九剑《Tome of Battle》/九剑-暮日.htm" onclick="return LinkClick('138',false,true)" target="content" title="九剑-暮日" onmousemove="window.status='九剑-暮日'"><img src="icons/11.gif" class="p"> <span id="l138" class="unselected">九剑-暮日</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/九剑《Tome of Battle》/九剑-漠风.htm" onclick="return LinkClick('139',false,true)" target="content" title="九剑-漠风" onmousemove="window.status='九剑-漠风'"><img src="icons/11.gif" class="p"> <span id="l139" class="unselected">九剑-漠风</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/九剑《Tome of Battle》/九剑-白鸦.htm" onclick="return LinkClick('140',false,true)" target="content" title="九剑-白鸦" onmousemove="window.status='九剑-白鸦'"><img src="icons/11.gif" class="p"> <span id="l140" class="unselected">九剑-白鸦</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/九剑《Tome of Battle》/九剑-石龙.htm" onclick="return LinkClick('141',false,true)" target="content" title="九剑-石龙" onmousemove="window.status='九剑-石龙'"><img src="icons/11.gif" class="p"> <span id="l141" class="unselected">九剑-石龙</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/九剑《Tome of Battle》/九剑-虎爪.htm" onclick="return LinkClick('142',false,true)" target="content" title="九剑-虎爪" onmousemove="window.status='九剑-虎爪'"><img src="icons/11.gif" class="p"> <span id="l142" class="unselected">九剑-虎爪</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/九剑《Tome of Battle》/九剑-虔心.htm" onclick="return LinkClick('143',false,true)" target="content" title="九剑-虔心" onmousemove="window.status='九剑-虔心'"><img src="icons/11.gif" class="p"> <span id="l143" class="unselected">九剑-虔心</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/九剑《Tome of Battle》/九剑-钢魂.htm" onclick="return LinkClick('144',false,true)" target="content" title="九剑-钢魂" onmousemove="window.status='九剑-钢魂'"><img src="icons/11.gif" class="p"> <span id="l144" class="unselected">九剑-钢魂</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/各种其他类法术及超能/九剑《Tome of Battle》/九剑-铁心.htm" onclick="return LinkClick('145',false,true)" target="content" title="九剑-铁心" onmousemove="window.status='九剑-铁心'"><img src="icons/11.gif" class="p"> <span id="l145" class="unselected">九剑-铁心</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('146')"><img id="imgn146" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('146',true,false)" onDblClick="return LinkDblClick('146')" target="content" title="暗影秘术" onmousemove="window.status='暗影秘术'"><img id="img146" src="icons/1.gif" class="p"> <span id="l146" class="unselected">暗影秘术</span></a></nobr></div>
+<div id="d146" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/暗影秘术/暗影秘术概述.htm" onclick="return LinkClick('147',false,true)" target="content" title="暗影秘术概述" onmousemove="window.status='暗影秘术概述'"><img src="icons/11.gif" class="p"> <span id="l147" class="unselected">暗影秘术概述</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('148')"><img id="imgn148" src="icons/uaplus.gif" class="p"></a><a href="#" onclick="return LinkClick('148',true,false)" onDblClick="return LinkDblClick('148')" target="content" title="暗影秘术详述" onmousemove="window.status='暗影秘术详述'"><img id="img148" src="icons/1.gif" class="p"> <span id="l148" class="unselected">暗影秘术详述</span></a></nobr></div>
+<div id="d148" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/暗影秘术/暗影秘术详述/暗影秘术A-C.htm" onclick="return LinkClick('149',false,true)" target="content" title="暗影秘术A-C" onmousemove="window.status='暗影秘术A-C'"><img src="icons/11.gif" class="p"> <span id="l149" class="unselected">暗影秘术A-C</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/暗影秘术/暗影秘术详述/暗影秘术D-K.htm" onclick="return LinkClick('150',false,true)" target="content" title="暗影秘术D-K" onmousemove="window.status='暗影秘术D-K'"><img src="icons/11.gif" class="p"> <span id="l150" class="unselected">暗影秘术D-K</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/暗影秘术/暗影秘术详述/暗影秘术L-R.htm" onclick="return LinkClick('151',false,true)" target="content" title="暗影秘术L-R" onmousemove="window.status='暗影秘术L-R'"><img src="icons/11.gif" class="p"> <span id="l151" class="unselected">暗影秘术L-R</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/暗影秘术/暗影秘术详述/暗影秘术S.htm" onclick="return LinkClick('152',false,true)" target="content" title="暗影秘术S" onmousemove="window.status='暗影秘术S'"><img src="icons/11.gif" class="p"> <span id="l152" class="unselected">暗影秘术S</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/各种其他类法术及超能/暗影秘术/暗影秘术详述/暗影秘术T-W.htm" onclick="return LinkClick('153',false,true)" target="content" title="暗影秘术T-W" onmousemove="window.status='暗影秘术T-W'"><img src="icons/11.gif" class="p"> <span id="l153" class="unselected">暗影秘术T-W</span></a></nobr></div>
+</div></div><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('154')"><img id="imgn154" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('154',true,false)" onDblClick="return LinkDblClick('154')" target="content" title="灵契" onmousemove="window.status='灵契'"><img id="img154" src="icons/1.gif" class="p"> <span id="l154" class="unselected">灵契</span></a></nobr></div>
+<div id="d154" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/各种其他类法术及超能/灵契/灵契师-契灵简表.htm" onclick="return LinkClick('155',false,true)" target="content" title="灵契师-契灵简表" onmousemove="window.status='灵契师-契灵简表'"><img src="icons/11.gif" class="p"> <span id="l155" class="unselected">灵契师-契灵简表</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('156')"><img id="imgn156" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('156',true,false)" onDblClick="return LinkDblClick('156')" target="content" title="灵能系统" onmousemove="window.status='灵能系统'"><img id="img156" src="icons/1.gif" class="p"> <span id="l156" class="unselected">灵能系统</span></a></nobr></div>
+<div id="d156" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/心灵术士·狂念者灵能列表.htm" onclick="return LinkClick('157',false,true)" target="content" title="心灵术士·狂念者灵能列表" onmousemove="window.status='心灵术士·狂念者灵能列表'"><img src="icons/11.gif" class="p"> <span id="l157" class="unselected">心灵术士·狂念者灵能列表</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/心灵术士派系.htm" onclick="return LinkClick('158',false,true)" target="content" title="心灵术士派系" onmousemove="window.status='心灵术士派系'"><img src="icons/11.gif" class="p"> <span id="l158" class="unselected">心灵术士派系</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/心灵武士灵能列表.htm" onclick="return LinkClick('159',false,true)" target="content" title="心灵武士灵能列表" onmousemove="window.status='心灵武士灵能列表'"><img src="icons/11.gif" class="p"> <span id="l159" class="unselected">心灵武士灵能列表</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/潜伏者（Lurk）灵能列表.htm" onclick="return LinkClick('160',false,true)" target="content" title="潜伏者（Lurk）灵能列表" onmousemove="window.status='潜伏者（Lurk）灵能列表'"><img src="icons/11.gif" class="p"> <span id="l160" class="unselected">潜伏者（Lurk）灵能列表</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵域（Mantle）列表.htm" onclick="return LinkClick('161',false,true)" target="content" title="灵域（Mantle）列表" onmousemove="window.status='灵域（Mantle）列表'"><img src="icons/11.gif" class="p"> <span id="l161" class="unselected">灵域（Mantle）列表</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('162')"><img id="imgn162" src="icons/uaplus.gif" class="p"></a><a href="#" onclick="return LinkClick('162',true,false)" onDblClick="return LinkDblClick('162')" target="content" title="灵能详述列表" onmousemove="window.status='灵能详述列表'"><img id="img162" src="icons/1.gif" class="p"> <span id="l162" class="unselected">灵能详述列表</span></a></nobr></div>
+<div id="d162" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/A.htm" onclick="return LinkClick('163',false,true)" target="content" title="A" onmousemove="window.status='A'"><img src="icons/11.gif" class="p"> <span id="l163" class="unselected">A</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/B.htm" onclick="return LinkClick('164',false,true)" target="content" title="B" onmousemove="window.status='B'"><img src="icons/11.gif" class="p"> <span id="l164" class="unselected">B</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/C.htm" onclick="return LinkClick('165',false,true)" target="content" title="C" onmousemove="window.status='C'"><img src="icons/11.gif" class="p"> <span id="l165" class="unselected">C</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/D.htm" onclick="return LinkClick('166',false,true)" target="content" title="D" onmousemove="window.status='D'"><img src="icons/11.gif" class="p"> <span id="l166" class="unselected">D</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/E.htm" onclick="return LinkClick('167',false,true)" target="content" title="E" onmousemove="window.status='E'"><img src="icons/11.gif" class="p"> <span id="l167" class="unselected">E</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/F.htm" onclick="return LinkClick('168',false,true)" target="content" title="F" onmousemove="window.status='F'"><img src="icons/11.gif" class="p"> <span id="l168" class="unselected">F</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/G.htm" onclick="return LinkClick('169',false,true)" target="content" title="G" onmousemove="window.status='G'"><img src="icons/11.gif" class="p"> <span id="l169" class="unselected">G</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/H.htm" onclick="return LinkClick('170',false,true)" target="content" title="H" onmousemove="window.status='H'"><img src="icons/11.gif" class="p"> <span id="l170" class="unselected">H</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/I.htm" onclick="return LinkClick('171',false,true)" target="content" title="I" onmousemove="window.status='I'"><img src="icons/11.gif" class="p"> <span id="l171" class="unselected">I</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/K.htm" onclick="return LinkClick('172',false,true)" target="content" title="K" onmousemove="window.status='K'"><img src="icons/11.gif" class="p"> <span id="l172" class="unselected">K</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/L.htm" onclick="return LinkClick('173',false,true)" target="content" title="L" onmousemove="window.status='L'"><img src="icons/11.gif" class="p"> <span id="l173" class="unselected">L</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/M.htm" onclick="return LinkClick('174',false,true)" target="content" title="M" onmousemove="window.status='M'"><img src="icons/11.gif" class="p"> <span id="l174" class="unselected">M</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/N.htm" onclick="return LinkClick('175',false,true)" target="content" title="N" onmousemove="window.status='N'"><img src="icons/11.gif" class="p"> <span id="l175" class="unselected">N</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/O.htm" onclick="return LinkClick('176',false,true)" target="content" title="O" onmousemove="window.status='O'"><img src="icons/11.gif" class="p"> <span id="l176" class="unselected">O</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/P.htm" onclick="return LinkClick('177',false,true)" target="content" title="P" onmousemove="window.status='P'"><img src="icons/11.gif" class="p"> <span id="l177" class="unselected">P</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/Q.htm" onclick="return LinkClick('178',false,true)" target="content" title="Q" onmousemove="window.status='Q'"><img src="icons/11.gif" class="p"> <span id="l178" class="unselected">Q</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/R.htm" onclick="return LinkClick('179',false,true)" target="content" title="R" onmousemove="window.status='R'"><img src="icons/11.gif" class="p"> <span id="l179" class="unselected">R</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/S.htm" onclick="return LinkClick('180',false,true)" target="content" title="S" onmousemove="window.status='S'"><img src="icons/11.gif" class="p"> <span id="l180" class="unselected">S</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/T.htm" onclick="return LinkClick('181',false,true)" target="content" title="T" onmousemove="window.status='T'"><img src="icons/11.gif" class="p"> <span id="l181" class="unselected">T</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/U.htm" onclick="return LinkClick('182',false,true)" target="content" title="U" onmousemove="window.status='U'"><img src="icons/11.gif" class="p"> <span id="l182" class="unselected">U</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/V.htm" onclick="return LinkClick('183',false,true)" target="content" title="V" onmousemove="window.status='V'"><img src="icons/11.gif" class="p"> <span id="l183" class="unselected">V</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/W.htm" onclick="return LinkClick('184',false,true)" target="content" title="W" onmousemove="window.status='W'"><img src="icons/11.gif" class="p"> <span id="l184" class="unselected">W</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/blank.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/各种其他类法术及超能/灵能系统/灵能详述列表/Z.htm" onclick="return LinkClick('185',false,true)" target="content" title="Z" onmousemove="window.status='Z'"><img src="icons/11.gif" class="p"> <span id="l185" class="unselected">Z</span></a></nobr></div>
+</div></div><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('186')"><img id="imgn186" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('186',true,false)" onDblClick="return LinkDblClick('186')" target="content" title="邪术" onmousemove="window.status='邪术'"><img id="img186" src="icons/1.gif" class="p"> <span id="l186" class="unselected">邪术</span></a></nobr></div>
+<div id="d186" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/各种其他类法术及超能/邪术/邪术-warlock.htm" onclick="return LinkClick('187',false,true)" target="content" title="邪术-warlock" onmousemove="window.status='邪术-warlock'"><img src="icons/11.gif" class="p"> <span id="l187" class="unselected">邪术-warlock</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('188')"><img id="imgn188" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('188',true,false)" onDblClick="return LinkDblClick('188')" target="content" title="魂能" onmousemove="window.status='魂能'"><img id="img188" src="icons/1.gif" class="p"> <span id="l188" class="unselected">魂能</span></a></nobr></div>
+<div id="d188" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/魂能/图腾师灵魂融合列表.htm" onclick="return LinkClick('189',false,true)" target="content" title="图腾师灵魂融合列表" onmousemove="window.status='图腾师灵魂融合列表'"><img src="icons/11.gif" class="p"> <span id="l189" class="unselected">图腾师灵魂融合列表</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/魂能/天魂者灵魂融合列表.htm" onclick="return LinkClick('190',false,true)" target="content" title="天魂者灵魂融合列表" onmousemove="window.status='天魂者灵魂融合列表'"><img src="icons/11.gif" class="p"> <span id="l190" class="unselected">天魂者灵魂融合列表</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/魂能/魂能师灵魂融合列表.htm" onclick="return LinkClick('191',false,true)" target="content" title="魂能师灵魂融合列表" onmousemove="window.status='魂能师灵魂融合列表'"><img src="icons/11.gif" class="p"> <span id="l191" class="unselected">魂能师灵魂融合列表</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/各种其他类法术及超能/魂能/魂能详述.htm" onclick="return LinkClick('192',false,true)" target="content" title="魂能详述" onmousemove="window.status='魂能详述'"><img src="icons/11.gif" class="p"> <span id="l192" class="unselected">魂能详述</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><a href="#" onClick="return NodeClick('193')"><img id="imgn193" src="icons/tplus.gif" class="p"></a><a href="#" onclick="return LinkClick('193',true,false)" onDblClick="return LinkDblClick('193')" target="content" title="龙之邪术" onmousemove="window.status='龙之邪术'"><img id="img193" src="icons/1.gif" class="p"> <span id="l193" class="unselected">龙之邪术</span></a></nobr></div>
+<div id="d193" style="display:none"><div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/tshaped.gif" class="p"><a href="topics/各种其他类法术及超能/龙之邪术/龙之邪术列表.htm" onclick="return LinkClick('194',false,true)" target="content" title="龙之邪术列表" onmousemove="window.status='龙之邪术列表'"><img src="icons/11.gif" class="p"> <span id="l194" class="unselected">龙之邪术列表</span></a></nobr></div>
+<div><nobr><img src="icons/line.gif" class="p"><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/各种其他类法术及超能/龙之邪术/龙之邪术详述.htm" onclick="return LinkClick('195',false,true)" target="content" title="龙之邪术详述" onmousemove="window.status='龙之邪术详述'"><img src="icons/11.gif" class="p"> <span id="l195" class="unselected">龙之邪术详述</span></a></nobr></div>
+</div><div><nobr><img src="icons/line.gif" class="p"><img src="icons/upangle.gif" class="p"><a href="topics/各种其他类法术及超能/机关术.htm" onclick="return LinkClick('196',false,true)" target="content" title="机关术" onmousemove="window.status='机关术'"><img src="icons/11.gif" class="p"> <span id="l196" class="unselected">机关术</span></a></nobr></div>
+</div><div><nobr><img src="icons/upangle.gif" class="p"><a href="topics/3R书目缩写列表.htm" onclick="return LinkClick('197',false,true)" target="content" title="3R书目缩写列表" onmousemove="window.status='3R书目缩写列表'"><img src="icons/11.gif" class="p"> <span id="l197" class="unselected">3R书目缩写列表</span></a></nobr></div>
+<script>divlist = [2,17,104,133,134,146,148,154,156,162,186,188,193]</script>
+</body>
+</html>
